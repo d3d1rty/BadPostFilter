@@ -6,6 +6,7 @@
     android:padding="16dp"
     android:text="TextView"
     android:textAlignment="center"
+    android:textColor="@color/zinc_900"
     android:textSize="32sp">
 
 </TextView>

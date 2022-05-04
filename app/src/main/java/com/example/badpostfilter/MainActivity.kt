@@ -251,7 +251,7 @@ class MainActivity : AppCompatActivity() {
                                 .updateThought(record)
 
                             withContext(Dispatchers.Main) {
-                                view?.setBackgroundColor(Color.parseColor("#44FF88"))
+                                view.setBackgroundColor(getResources().getColor(R.color.emerald_200))
                             }
                         }
                     }
@@ -275,9 +275,9 @@ class MainActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
             holder.view.text = thoughts[position].toString()
             if (thoughts[position].approved) {
-                holder.view.setBackgroundColor(Color.parseColor("#44FF88"))
+                holder.view.setBackgroundColor(getResources().getColor(R.color.emerald_200))
             } else {
-                holder.view.setBackgroundColor(Color.WHITE)
+                holder.view.setBackgroundColor(getResources().getColor(R.color.white))
             }
         }
 
