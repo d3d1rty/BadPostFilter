@@ -21,7 +21,7 @@ class AddThoughtActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityAddThoughtBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        title = "Add Note"
+        title = "Add Thought"
         binding.btnCreate.setOnClickListener(this)
     }
 
