@@ -2,13 +2,18 @@ package com.example.badpostfilter
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.badpostfilter.database.AppDatabase
@@ -18,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -41,6 +47,61 @@ class MainActivity : AppCompatActivity() {
         binding.thoughtsList.adapter = adapter
 
         loadThoughts()
+
+        val swipeToDeleteCallback = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val thought = thoughts[viewHolder.adapterPosition]
+                thoughts.removeAt(viewHolder.adapterPosition)
+                adapter?.notifyItemRemoved(viewHolder.adapterPosition)
+                CoroutineScope(Dispatchers.IO).launch {
+                    AppDatabase.getDatabase(applicationContext).thoughtDao().deleteThought(thought)
+                }
+                Toast.makeText(applicationContext, "Thought deleted successfully", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onChildDraw(
+                c: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
+            ) {
+                c.clipRect(0f, viewHolder.itemView.top.toFloat(), dX, viewHolder.itemView.bottom.toFloat())
+                c.drawColor(Color.RED)
+                val textMargin = 42
+                val trashBinIcon = resources.getDrawable(R.drawable.ic_baseline_delete_42, null)
+                trashBinIcon.bounds = Rect(
+                    textMargin,
+                    viewHolder.itemView.top + textMargin,
+                    textMargin + trashBinIcon.intrinsicWidth,
+                    viewHolder.itemView.top + trashBinIcon.intrinsicHeight + textMargin
+                )
+                trashBinIcon.draw(c)
+
+                super.onChildDraw(
+                    c,
+                    recyclerView,
+                    viewHolder,
+                    dX,
+                    dY,
+                    actionState,
+                    isCurrentlyActive
+                )
+            }
+        }
+
+        val deleteHelper = ItemTouchHelper(swipeToDeleteCallback)
+        deleteHelper.attachToRecyclerView(binding.thoughtsList)
     }
 
     private fun loadThoughts() {
