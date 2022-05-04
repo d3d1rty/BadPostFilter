@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.badpostfilter.database.AppDatabase
+import com.example.badpostfilter.database.Thought
 import com.example.badpostfilter.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +20,7 @@ import kotlinx.coroutines.withContext
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: MainAdapter
-    private val thoughts = mutableListOf<String>() // change to Thought class once implemented
+    private val thoughts = mutableListOf<Thought>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +43,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadThoughts() {
         CoroutineScope(Dispatchers.IO).launch {
-            // replace this line with call to DB
-            val results = mutableListOf<String>("this", "is", "dummy", "data")
+            val db = AppDatabase.getDatabase(applicationContext)
+            val dao = db.thoughtDao()
+            val results = dao.getAllThoughts()
 
             withContext(Dispatchers.Main) {
                 thoughts.clear()
