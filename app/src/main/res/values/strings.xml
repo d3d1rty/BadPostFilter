@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BadPostFilter</string>
+    <string name="intent_key_thought_id">intent_key_thought_id</string>
 </resources>

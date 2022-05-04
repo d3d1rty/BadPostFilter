@@ -151,7 +151,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onClick(p0: View?) {
-            TODO("Not yet implemented")
+            val intent = Intent(applicationContext, EditThoughtActivity::class.java)
+            val thought = thoughts[adapterPosition]
+            intent.putExtra(
+                getString(R.string.intent_key_thought_id),
+                thought.id
+            )
+            startForResult.launch(intent)
         }
 
         override fun onLongClick(p0: View?): Boolean {
