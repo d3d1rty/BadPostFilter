@@ -1,6 +1,7 @@
 package com.example.badpostfilter
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
@@ -150,7 +151,7 @@ class MainActivity : AppCompatActivity() {
             view.setOnLongClickListener(this)
         }
 
-        override fun onClick(p0: View?) {
+        override fun onClick(view: View?) {
             val intent = Intent(applicationContext, EditThoughtActivity::class.java)
             val thought = thoughts[adapterPosition]
             intent.putExtra(
@@ -160,8 +161,33 @@ class MainActivity : AppCompatActivity() {
             startForResult.launch(intent)
         }
 
-        override fun onLongClick(p0: View?): Boolean {
-            TODO("Not yet implemented")
+        override fun onLongClick(view: View?): Boolean {
+            val thought = thoughts[adapterPosition]
+            if (thought.approved) {
+                Toast
+                    .makeText(applicationContext, "This post has already been approved", Toast.LENGTH_LONG)
+                    .show()
+            } else {
+                val builder = AlertDialog.Builder(view!!.context)
+                    .setTitle("Approve Thought for Posting")
+                    .setMessage("Are you sure that you want to approve this thought for posting?")
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(android.R.string.ok) { dialogInterface, whichButton ->
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val record = Thought(thought.id, thought.title, thought.thought, true)
+                            AppDatabase.getDatabase(applicationContext).thoughtDao()
+                                .updateThought(record)
+
+                            withContext(Dispatchers.Main) {
+                                view?.setBackgroundColor(Color.parseColor("#44FF88"))
+                            }
+                        }
+                    }
+
+                builder.show()
+            }
+
+            return true
         }
     }
 
@@ -176,6 +202,9 @@ class MainActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
             holder.view.text = thoughts[position].toString()
+            if (thoughts[position].approved) {
+                holder.view.setBackgroundColor(Color.parseColor("#44FF88"))
+            }
         }
 
         override fun getItemCount(): Int {
