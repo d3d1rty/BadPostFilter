@@ -200,6 +200,15 @@ class MainActivity : AppCompatActivity() {
             loadPendingThoughts()
             return true
         }
+        else if (item.itemId == R.id.about_menu_item) {
+            val builder = AlertDialog.Builder(binding.root.context)
+                .setTitle("About BadPostFilter")
+                .setMessage("BadPostFilter is an app developed by Richard Davis that allows users to screen their thoughts for quality before they post them to social media.")
+                .setPositiveButton(android.R.string.ok, null)
+
+            builder.show()
+            return true
+        }
         return super.onOptionsItemSelected(item)
     }
 
