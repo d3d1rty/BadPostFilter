@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">BadPostFilter</string>
     <string name="intent_key_thought_id">intent_key_thought_id</string>
+    <string name="help_instructions_title">Instructions</string>
+    <string name="help_instructions_create">To create a new thought, select the "+" icon at the top of the app. Give your thought a title and then write a draft of what you would like to post. Click save.</string>
+    <string name="help_instructions_edit">To edit a thought, simply tap on the thought to bring up the edit screen. From there, make any changes that you need to and click save.</string>
+    <string name="help_instructions_delete">To delete a thought, swipe right on the thought that you wish to delete.</string>
+    <string name="help_instructions_approve">To approve a thought for posting, long press on the thought and then select OK at the dialogue that appears. A post will appear with a green background once it has been approved.</string>
+    <string name="help_instructions_sort">You can sort/filter the thoughts by selecting an appropriate option from the menu.</string>
 </resources>

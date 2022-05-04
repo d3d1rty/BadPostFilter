@@ -209,6 +209,11 @@ class MainActivity : AppCompatActivity() {
             builder.show()
             return true
         }
+        else if (item.itemId == R.id.help_menu_item) {
+            val intent = Intent(applicationContext, HelpActivity::class.java)
+            startActivity(intent)
+            return true
+        }
         return super.onOptionsItemSelected(item)
     }
 

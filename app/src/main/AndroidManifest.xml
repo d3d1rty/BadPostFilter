@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BadPostFilter">
         <activity
+            android:name=".HelpActivity"
+            android:exported="true" />
+        <activity
             android:name=".EditThoughtActivity"
             android:exported="true" />
         <activity
