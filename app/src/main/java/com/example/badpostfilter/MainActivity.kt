@@ -119,6 +119,48 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadApprovedThoughts() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val db = AppDatabase.getDatabase(applicationContext)
+            val dao = db.thoughtDao()
+            val results = dao.getThoughtsByStatus(true)
+
+            withContext(Dispatchers.Main) {
+                thoughts.clear()
+                thoughts.addAll(results)
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    private fun loadPendingThoughts() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val db = AppDatabase.getDatabase(applicationContext)
+            val dao = db.thoughtDao()
+            val results = dao.getThoughtsByStatus(false)
+
+            withContext(Dispatchers.Main) {
+                thoughts.clear()
+                thoughts.addAll(results)
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    private fun sortByTitle() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val db = AppDatabase.getDatabase(applicationContext)
+            val dao = db.thoughtDao()
+            val results = dao.getAllThoughtsByTitle()
+
+            withContext(Dispatchers.Main) {
+                thoughts.clear()
+                thoughts.addAll(results)
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
+
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         result : ActivityResult ->
 
@@ -140,6 +182,22 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.add_thought_menu_item) {
             addNewThought()
+            return true
+        }
+        else if (item.itemId == R.id.sort_by_title_menu_item) {
+            sortByTitle()
+            return true
+        }
+        else if (item.itemId == R.id.show_all_menu_item) {
+            loadThoughts()
+            return true
+        }
+        else if (item.itemId == R.id.show_approved_menu_item) {
+            loadApprovedThoughts()
+            return true
+        }
+        else if (item.itemId == R.id.show_pending_menu_item) {
+            loadPendingThoughts()
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -204,6 +262,8 @@ class MainActivity : AppCompatActivity() {
             holder.view.text = thoughts[position].toString()
             if (thoughts[position].approved) {
                 holder.view.setBackgroundColor(Color.parseColor("#44FF88"))
+            } else {
+                holder.view.setBackgroundColor(Color.WHITE)
             }
         }
 
