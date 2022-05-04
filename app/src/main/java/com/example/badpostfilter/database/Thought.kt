@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 class Thought(
-    @PrimaryKey(autoGenerate = true) val id : Long,
+    @PrimaryKey(autoGenerate = true) val id : Long?,
     @ColumnInfo val title : String,
     @ColumnInfo val thought : String,
     @ColumnInfo val approved : Boolean

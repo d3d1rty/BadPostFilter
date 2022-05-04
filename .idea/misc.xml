@@ -3,8 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_add_thought.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.12447916666666667" />
         <entry key="app/src/main/res/layout/thought_item_view.xml" value="0.14010416666666667" />
+        <entry key="app/src/main/res/menu/main_menu.xml" value="0.33" />
       </map>
     </option>
   </component>

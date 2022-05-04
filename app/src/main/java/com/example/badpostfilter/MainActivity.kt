@@ -1,11 +1,13 @@
 package com.example.badpostfilter
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -53,6 +55,32 @@ class MainActivity : AppCompatActivity() {
                 adapter.notifyDataSetChanged()
             }
         }
+    }
+
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        result : ActivityResult ->
+
+        if (result.resultCode == Activity.RESULT_OK) {
+            loadThoughts()
+        }
+    }
+
+    private fun addNewThought() {
+        val intent = Intent(applicationContext, AddThoughtActivity::class.java)
+        startForResult.launch(intent)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.add_thought_menu_item) {
+            addNewThought()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     inner class MainViewHolder(val view: TextView) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener {
